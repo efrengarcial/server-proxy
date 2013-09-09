@@ -1,5 +1,7 @@
 package com.wtf.broker.jms.listener;
 
+import java.io.Serializable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,8 +12,8 @@ public class AsyncTopicReceiver  {
 
 	private static final Logger LOG = LoggerFactory.getLogger(AsyncTopicReceiver.class);
 
-	public void receive(Mensaje mensaje) {
-		LOG.info("Received message: ", mensaje.getText());
+	public void handleMessage(Serializable  mensaje) {
+		LOG.info("Received message: " , (Mensaje)mensaje  );
 	}
 
 }
