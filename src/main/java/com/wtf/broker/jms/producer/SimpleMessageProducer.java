@@ -28,6 +28,6 @@ public class SimpleMessageProducer {
         Mensaje message = new Mensaje();
         message.setText("Hola");
 		jmsTemplate.convertAndSend(message);
-		LOG.info("enviando mensaje....");      
+		LOG.info("enviando mensaje cola QCotizaciones....");      
     }
 }

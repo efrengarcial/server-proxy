@@ -10,20 +10,17 @@
   <bean id="connectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory"
     p:brokerURL="tcp://localhost:61616"  p:useAsyncSend="true" />
     
-    <bean id="cachingConnectionFactory" class="org.springframework.jms.connection.CachingConnectionFactory">
-    	<property name="targetConnectionFactory" ref="connectionFactory"/>	
-	</bean>
-  
-  <bean id="destination" class="org.apache.activemq.command.ActiveMQTopic">
-    <constructor-arg value="ZAPATOS" />
+    
+  <bean id="destination" class="org.apache.activemq.command.ActiveMQQueue">
+    <constructor-arg value="QCotizaciones" />
   </bean>
     
   <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate"
     p:connectionFactory-ref="connectionFactory"
-    p:defaultDestination-ref="destination" 
-    p:pubSubDomain="true" />
+    p:defaultDestination-ref="destination" />
   
-  <bean id="messageProducer" class="com.wtf.broker.jms.producer.SimpleMessageProducer"
+   <bean id="messageProducer" class="com.wtf.broker.jms.producer.SimpleMessageProducer"
     p:jmsTemplate-ref="jmsTemplate" />
-  
+    
+   
 </beans>

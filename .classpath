@@ -65,5 +65,6 @@
 	<classpathentry kind="lib" path="lib/spring-expression-3.0.6.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/spring-jms-3.0.6.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/spring-tx-3.0.6.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/QuotationDomain.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
