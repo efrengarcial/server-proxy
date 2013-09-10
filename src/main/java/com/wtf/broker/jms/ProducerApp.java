@@ -8,6 +8,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.wtf.broker.jms.producer.SimpleMessageProducer;
+import com.wtf.quotation.domain.SolicitudCotizacion;
 
 /**
  * This class drives the example from the producer side. It loads the Spring 
@@ -31,7 +32,8 @@ public class ProducerApp {
     	ApplicationContext context = new ClassPathXmlApplicationContext("/META-INF/spring/producer-jms-context.xml", ProducerApp.class);
         SimpleMessageProducer producer = (SimpleMessageProducer) context.getBean("messageProducer");
         LOG.info("Enviando mensajes a al tema");
-        producer.sendMessages();
+        SolicitudCotizacion solicitud=null;
+        producer.sendMessages(solicitud);
     }
     
 }
