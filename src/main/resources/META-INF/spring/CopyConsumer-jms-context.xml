@@ -8,7 +8,8 @@
     http://www.springframework.org/schema/jms http://www.springframework.org/schema/jms/spring-jms.xsd">
 
   <bean id="connectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory"
-    p:brokerURL="tcp://localhost:61616" />
+    p:brokerURL="tcp://localhost:61616" >    	
+    </bean>
     
      <bean id="cachingConnectionFactory" class="org.springframework.jms.connection.CachingConnectionFactory">
     	<property name="targetConnectionFactory" ref="connectionFactory"/>	
@@ -44,18 +45,25 @@
 	    </constructor-arg>
 	</bean>
      
- 
+ <!--
+ http://stefanlearninglog.blogspot.com/2009/07/persistent-jms-topics-using-activemq.html 
+  -->
  <bean id="myDurableConsumer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+  <property name="concurrentConsumers" value="1"/>
  <property name="connectionFactory" ref="connectionFactory" />
- <property name="sessionTransacted" value="true" />
+ <property name="sessionTransacted" value="false" />
  <property name="subscriptionDurable" value="true"/> 
  <property name="destinationName" value="COMPUTADORES" />
+ <property name="pubSubDomain" value="true"/>
+ <property name="clientId" value="ProveedorSAP"/>
+ <property name="durableSubscriptionName" value="ProveedorSAP"/>
  <property name="messageListener" ref="messageListener" /> 
 </bean>
 
- 
+ <!-- 
  <jms:listener-container connection-factory="connectionFactory" destination-type="durableTopic" concurrency="1-1">
     <jms:listener destination="COMPUTADORES" ref="messageListener" />
 </jms:listener-container>
-
+ -->
+ 
 </beans>

@@ -15,7 +15,7 @@
 	</bean>
   
   <bean id="destination" class="org.apache.activemq.command.ActiveMQTopic">
-    <constructor-arg value="COMPUTADORES" />
+    <constructor-arg value="ZAPATOS" />
   </bean>
     
   <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate"
