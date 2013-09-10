@@ -8,25 +8,26 @@
     http://www.springframework.org/schema/jms http://www.springframework.org/schema/jms/spring-jms.xsd">
 
   <bean id="connectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory"
-    p:brokerURL="tcp://localhost:61616" />
+    p:brokerURL="tcp://localhost:61616" >    	
+    </bean>
     
      <bean id="cachingConnectionFactory" class="org.springframework.jms.connection.CachingConnectionFactory">
     	<property name="targetConnectionFactory" ref="connectionFactory"/>	
 	</bean>
   
-  <bean id="destination" class="org.apache.activemq.command.ActiveMQTopic">
+  <bean id="destination" class="org.apache.activemq.command.ActiveMQTopic" >
     <constructor-arg value="ZAPATOS" />
   </bean>
     
   <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate"
     p:connectionFactory-ref="connectionFactory"
     p:defaultDestination-ref="destination" 
-     p:pubSubDomain="true" />
+     p:pubSubDomain="true"  />
  
  
   <bean id="asyncTopicReceiver" class="com.wtf.broker.jms.listener.AsyncTopicReceiver" />
+  
 
-   
   <!-- 
     This is the Spring DefaultMessageListenerContainer (DMLC). All default values 
     for the DMLC are used except for concurrency; By default the DMLC knows to use the 
@@ -37,8 +38,32 @@
   </jms:listener-container>
  -->
  
- <jms:listener-container connection-factory="connectionFactory" destination-type="topic" concurrency="1-1">
-    <jms:listener destination="ZAPATOS" ref="asyncTopicReceiver" method="handleMessage"/>
-</jms:listener-container>
+   <!-- this is the Message Driven POJO (MDP) -->
+	<bean id="messageListener" class="org.springframework.jms.listener.adapter.MessageListenerAdapter">
+	    <constructor-arg>
+	        <bean class="com.wtf.broker.jms.listener.AsyncTopicReceiver"/>
+	    </constructor-arg>
+	</bean>
+     
+ <!--
+ http://stefanlearninglog.blogspot.com/2009/07/persistent-jms-topics-using-activemq.html 
+  -->
+ <bean id="myDurableConsumer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+  <property name="concurrentConsumers" value="1"/>
+ <property name="connectionFactory" ref="connectionFactory" />
+ <property name="sessionTransacted" value="false" />
+ <property name="subscriptionDurable" value="true"/> 
+ <property name="destinationName" value="ZAPATOS" />
+ <property name="pubSubDomain" value="true"/>
+ <property name="clientId" value="ProveedorSAP"/>
+ <property name="durableSubscriptionName" value="ProveedorSAP"/>
+ <property name="messageListener" ref="messageListener" /> 
+</bean>
 
+ <!-- 
+ <jms:listener-container connection-factory="connectionFactory" destination-type="durableTopic" concurrency="1-1">
+    <jms:listener destination="ZAPATOS" ref="messageListener" />
+</jms:listener-container>
+ -->
+ 
 </beans>
